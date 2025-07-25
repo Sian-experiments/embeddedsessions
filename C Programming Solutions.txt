@@ -1,0 +1,919 @@
+# Complete C Programming Solutions with Line-by-Line Explanations
+
+## I. Data Types, Variables, and Operators
+
+### Question 1: Difference between `int a;` and `const int a = 10;`
+
+**Answer:**
+- `int a;` declares a mutable integer variable that can be modified after declaration
+- `const int a = 10;` declares a constant integer that cannot be modified after initialization
+
+**Scenario where const is useful:** Mathematical constants like PI, configuration values, or array sizes that shouldn't change during program execution.
+
+```c
+#include <stdio.h>
+
+int main() {
+    int a;              // Mutable variable
+    const int b = 10;   // Immutable constant
+    
+    a = 5;     // Valid - can modify mutable variable
+    a = 15;    // Valid - can modify again
+    
+    // b = 20; // ERROR - cannot modify const variable
+    
+    printf("a = %d, b = %d\n", a, b);
+    return 0;
+}
+```
+
+**Line-by-line explanation:**
+- Line 4: Declares a mutable integer variable `a`
+- Line 5: Declares and initializes a constant integer `b` with value 10
+- Line 7-8: Valid assignments to mutable variable `a`
+- Line 10: Commented line that would cause compilation error if uncommented
+- Line 12: Prints both values
+
+### Question 2: Complex Expression Evaluation
+
+```c
+#include <stdio.h>
+
+int main() {
+    int x = 5, y = 10;
+    int result = (x++ * --y) + (x > y ? 1 : 0);
+    printf("Result: %d\n", result);
+    return 0;
+}
+```
+
+**Step-by-step evaluation:**
+1. Initial values: x = 5, y = 10
+2. Evaluate `--y`: y becomes 9, expression evaluates to 9
+3. Evaluate `x++`: expression evaluates to 5 (current value), then x becomes 6
+4. Calculate `(x++ * --y)`: 5 * 9 = 45
+5. After first part: x = 6, y = 9
+6. Evaluate `(x > y ? 1 : 0)`: 6 > 9 is false, so result is 0
+7. Final calculation: 45 + 0 = 45
+
+**Output:** Result: 45
+
+## II. Control Flow Statements
+
+### Question 1: Diamond Pattern
+
+```c
+#include <stdio.h>
+
+int main() {
+    int n;
+    printf("Enter a positive integer: ");
+    scanf("%d", &n);
+    
+    // Upper half of diamond (including middle)
+    for (int i = 1; i <= n; i++) {
+        // Print spaces
+        for (int j = 1; j <= n - i; j++) {
+            printf(" ");
+        }
+        // Print stars
+        for (int k = 1; k <= 2 * i - 1; k++) {
+            printf("*");
+        }
+        printf("\n");
+    }
+    
+    // Lower half of diamond
+    for (int i = n - 1; i >= 1; i--) {
+        // Print spaces
+        for (int j = 1; j <= n - i; j++) {
+            printf(" ");
+        }
+        // Print stars
+        for (int k = 1; k <= 2 * i - 1; k++) {
+            printf("*");
+        }
+        printf("\n");
+    }
+    
+    return 0;
+}
+```
+
+**Line-by-line explanation:**
+- Line 4-6: Get input from user
+- Line 9: Outer loop for upper half (1 to n rows)
+- Line 11-13: Inner loop to print leading spaces (n-i spaces for row i)
+- Line 15-17: Inner loop to print stars (2*i-1 stars for row i)
+- Line 18: Move to next line after each row
+- Line 22: Outer loop for lower half (n-1 down to 1 rows)
+- Line 24-31: Same logic as upper half but with decreasing i
+
+### Question 2: Simple Calculator
+
+```c
+#include <stdio.h>
+
+int main() {
+    double num1, num2, result;
+    char operator;
+    
+    printf("Enter first number: ");
+    scanf("%lf", &num1);
+    
+    printf("Enter operator (+, -, *, /): ");
+    scanf(" %c", &operator);  // Space before %c to consume newline
+    
+    printf("Enter second number: ");
+    scanf("%lf", &num2);
+    
+    switch (operator) {
+        case '+':
+            result = num1 + num2;
+            printf("%.2lf + %.2lf = %.2lf\n", num1, num2, result);
+            break;
+        case '-':
+            result = num1 - num2;
+            printf("%.2lf - %.2lf = %.2lf\n", num1, num2, result);
+            break;
+        case '*':
+            result = num1 * num2;
+            printf("%.2lf * %.2lf = %.2lf\n", num1, num2, result);
+            break;
+        case '/':
+            if (num2 != 0) {
+                result = num1 / num2;
+                printf("%.2lf / %.2lf = %.2lf\n", num1, num2, result);
+            } else {
+                printf("Error: Division by zero!\n");
+            }
+            break;
+        default:
+            printf("Error: Invalid operator!\n");
+            break;
+    }
+    
+    return 0;
+}
+```
+
+**Line-by-line explanation:**
+- Line 4-5: Declare variables for numbers, result, and operator
+- Line 7-8: Get first number from user
+- Line 10-11: Get operator (space before %c prevents newline issues)
+- Line 13-14: Get second number from user
+- Line 16: Start switch statement on operator
+- Line 17-20: Addition case
+- Line 21-24: Subtraction case
+- Line 25-28: Multiplication case
+- Line 29-35: Division case with zero-division check
+- Line 36-38: Default case for invalid operators
+
+## III. Functions
+
+### Question 1: Prime Number Function
+
+```c
+#include <stdio.h>
+#include <math.h>
+
+int is_prime(int num) {
+    if (num <= 1) {
+        return 0;  // Numbers <= 1 are not prime
+    }
+    if (num == 2) {
+        return 1;  // 2 is prime
+    }
+    if (num % 2 == 0) {
+        return 0;  // Even numbers > 2 are not prime
+    }
+    
+    // Check odd divisors up to sqrt(num)
+    for (int i = 3; i <= sqrt(num); i += 2) {
+        if (num % i == 0) {
+            return 0;  // Found a divisor, not prime
+        }
+    }
+    return 1;  // No divisors found, is prime
+}
+
+int main() {
+    printf("Prime numbers between 1 and 100:\n");
+    for (int i = 1; i <= 100; i++) {
+        if (is_prime(i)) {
+            printf("%d ", i);
+        }
+    }
+    printf("\n");
+    return 0;
+}
+```
+
+**Line-by-line explanation:**
+- Line 4: Function definition with integer parameter and return type
+- Line 5-7: Handle edge case for numbers <= 1
+- Line 8-10: Special case for 2 (only even prime)
+- Line 11-13: Eliminate even numbers > 2
+- Line 16: Loop through odd numbers up to square root of num
+- Line 17-19: If divisor found, number is not prime
+- Line 21: If no divisors found, number is prime
+- Line 25-31: Main function calls is_prime for numbers 1-100
+
+### Question 2: Recursive Factorial
+
+```c
+#include <stdio.h>
+
+long long factorial(int n) {
+    // Base case
+    if (n == 0 || n == 1) {
+        return 1;
+    }
+    // Recursive step
+    return n * factorial(n - 1);
+}
+
+int main() {
+    int num;
+    printf("Enter a non-negative integer: ");
+    scanf("%d", &num);
+    
+    if (num < 0) {
+        printf("Factorial is not defined for negative numbers.\n");
+    } else {
+        printf("Factorial of %d = %lld\n", num, factorial(num));
+    }
+    
+    return 0;
+}
+```
+
+**Line-by-line explanation:**
+- Line 3: Function declaration with int parameter, returns long long
+- Line 5-7: Base case - factorial of 0 and 1 is 1
+- Line 9: Recursive step - n * factorial(n-1)
+- Line 12-15: Get input from user
+- Line 17-21: Validate input and call factorial function
+
+**Base case:** When n = 0 or n = 1, return 1 (stops recursion)
+**Recursive step:** n * factorial(n-1) (reduces problem size)
+**Issues with large inputs:** Integer overflow, stack overflow due to deep recursion
+
+### Question 3: Power Function
+
+```c
+#include <stdio.h>
+
+double power(double base, int exp) {
+    double result = 1.0;
+    
+    if (exp == 0) {
+        return 1.0;  // Any number to power 0 is 1
+    }
+    
+    if (exp > 0) {
+        // Positive exponent
+        for (int i = 0; i < exp; i++) {
+            result *= base;
+        }
+    } else {
+        // Negative exponent
+        for (int i = 0; i < -exp; i++) {
+            result *= base;
+        }
+        result = 1.0 / result;  // Take reciprocal
+    }
+    
+    return result;
+}
+
+int main() {
+    double base;
+    int exp;
+    
+    printf("Enter base: ");
+    scanf("%lf", &base);
+    
+    printf("Enter exponent: ");
+    scanf("%d", &exp);
+    
+    printf("%.2lf^%d = %.6lf\n", base, exp, power(base, exp));
+    
+    return 0;
+}
+```
+
+**Line-by-line explanation:**
+- Line 3: Function declaration with double base and int exponent
+- Line 4: Initialize result to 1.0
+- Line 6-8: Handle zero exponent case
+- Line 10-15: Handle positive exponent with multiplication loop
+- Line 16-21: Handle negative exponent by calculating positive power then taking reciprocal
+- Line 23: Return final result
+- Line 26-35: Main function to test the power function
+
+## IV. Arrays and Strings
+
+### Question 1: Second Largest Element
+
+```c
+#include <stdio.h>
+
+int main() {
+    int arr[10];
+    int n, i;
+    int largest, second_largest;
+    int found_second = 0;
+    
+    printf("Enter number of elements (max 10): ");
+    scanf("%d", &n);
+    
+    if (n < 2) {
+        printf("Need at least 2 elements to find second largest.\n");
+        return 1;
+    }
+    
+    printf("Enter %d integers:\n", n);
+    for (i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+    
+    // Initialize largest and second_largest
+    largest = arr[0];
+    second_largest = arr[0];
+    
+    // Find largest
+    for (i = 1; i < n; i++) {
+        if (arr[i] > largest) {
+            largest = arr[i];
+        }
+    }
+    
+    // Find second largest
+    for (i = 0; i < n; i++) {
+        if (arr[i] != largest && arr[i] > second_largest) {
+            second_largest = arr[i];
+            found_second = 1;
+        }
+    }
+    
+    if (found_second) {
+        printf("Second largest element: %d\n", second_largest);
+    } else {
+        printf("All elements are the same.\n");
+    }
+    
+    return 0;
+}
+```
+
+**Line-by-line explanation:**
+- Line 4-7: Declare array and variables
+- Line 9-10: Get number of elements from user
+- Line 12-15: Validate minimum elements needed
+- Line 17-20: Read array elements from user
+- Line 22-23: Initialize largest and second_largest with first element
+- Line 25-30: Find the largest element in array
+- Line 32-37: Find second largest (different from largest)
+- Line 39-43: Display result based on whether second largest was found
+
+### Question 2: Reverse String In-Place
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+void reverse_string(char *str) {
+    int len = strlen(str);
+    int start = 0;
+    int end = len - 1;
+    char temp;
+    
+    // Swap characters from both ends moving towards center
+    while (start < end) {
+        temp = str[start];
+        str[start] = str[end];
+        str[end] = temp;
+        start++;
+        end--;
+    }
+}
+
+int main() {
+    char str[100];
+    
+    printf("Enter a string: ");
+    fgets(str, sizeof(str), stdin);
+    
+    // Remove newline if present
+    if (str[strlen(str) - 1] == '\n') {
+        str[strlen(str) - 1] = '\0';
+    }
+    
+    printf("Original string: %s\n", str);
+    reverse_string(str);
+    printf("Reversed string: %s\n", str);
+    
+    return 0;
+}
+```
+
+**Line-by-line explanation:**
+- Line 4: Function takes pointer to string (char array)
+- Line 5: Get string length using strlen()
+- Line 6-7: Initialize start and end pointers
+- Line 8: Temporary variable for swapping
+- Line 11: Loop while start pointer is less than end pointer
+- Line 12-14: Swap characters at start and end positions
+- Line 15-16: Move pointers towards center
+- Line 21: Declare string array in main
+- Line 23-24: Read string using fgets (safer than scanf)
+- Line 26-28: Remove trailing newline character if present
+- Line 30-32: Display original and reversed strings
+
+### Question 3: Vowel Counter
+
+```c
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+
+int main() {
+    char sentence[1000];
+    int vowel_count[5] = {0}; // a, e, i, o, u
+    char vowels[] = "aeiou";
+    int i, j;
+    char ch;
+    
+    printf("Enter a sentence: ");
+    fgets(sentence, sizeof(sentence), stdin);
+    
+    // Count vowels
+    for (i = 0; i < strlen(sentence); i++) {
+        ch = tolower(sentence[i]);  // Convert to lowercase
+        
+        // Check if character is a vowel
+        for (j = 0; j < 5; j++) {
+            if (ch == vowels[j]) {
+                vowel_count[j]++;
+                break;
+            }
+        }
+    }
+    
+    // Display results
+    printf("\nVowel count:\n");
+    for (i = 0; i < 5; i++) {
+        printf("%c: %d\n", vowels[i], vowel_count[i]);
+    }
+    
+    return 0;
+}
+```
+
+**Line-by-line explanation:**
+- Line 6: Array to store count of each vowel
+- Line 7: String containing vowels for reference
+- Line 8-10: Declare variables for loops and character processing
+- Line 12-13: Read sentence from user
+- Line 16: Loop through each character in sentence
+- Line 17: Convert character to lowercase for case-insensitive comparison
+- Line 19-24: Check if character matches any vowel and increment counter
+- Line 27-30: Display vowel counts
+
+## V. Pointers
+
+### Question 1: Call by Value vs Call by Reference
+
+```c
+#include <stdio.h>
+
+// Call by value - original variable not modified
+void call_by_value(int x) {
+    x = x + 10;
+    printf("Inside call_by_value: x = %d\n", x);
+}
+
+// Call by reference - original variable is modified
+void call_by_reference(int *x) {
+    *x = *x + 10;
+    printf("Inside call_by_reference: *x = %d\n", *x);
+}
+
+int main() {
+    int num = 5;
+    
+    printf("Original value: %d\n", num);
+    
+    call_by_value(num);
+    printf("After call_by_value: %d\n", num);
+    
+    call_by_reference(&num);
+    printf("After call_by_reference: %d\n", num);
+    
+    return 0;
+}
+```
+
+**Line-by-line explanation:**
+- Line 4: Function receives copy of value, changes don't affect original
+- Line 5-6: Modify local copy and print
+- Line 10: Function receives pointer (address) to original variable
+- Line 11-12: Modify value at address (original variable) and print
+- Line 16: Declare and initialize variable
+- Line 20: Call by value - pass value
+- Line 23: Call by reference - pass address using &
+- Line 24: Show final value after reference call
+
+### Question 2: Dynamic Memory Allocation
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int n, i;
+    int *arr;
+    int sum = 0;
+    double average;
+    
+    printf("Enter number of integers: ");
+    scanf("%d", &n);
+    
+    // Dynamically allocate memory
+    arr = (int*)malloc(n * sizeof(int));
+    
+    // Check if malloc succeeded
+    if (arr == NULL) {
+        printf("Memory allocation failed!\n");
+        return 1;
+    }
+    
+    printf("Enter %d integers:\n", n);
+    for (i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+        sum += arr[i];
+    }
+    
+    average = (double)sum / n;
+    printf("Average: %.2lf\n", average);
+    
+    // Free allocated memory
+    free(arr);
+    
+    return 0;
+}
+```
+
+**Line-by-line explanation:**
+- Line 5-8: Declare variables including pointer for dynamic array
+- Line 10-11: Get number of elements from user
+- Line 14: Allocate memory for n integers using malloc
+- Line 16-19: Check if malloc returned NULL (allocation failed)
+- Line 21-26: Read integers and calculate sum
+- Line 28-29: Calculate and display average
+- Line 31: Free allocated memory to prevent memory leak
+
+### Question 3: Arrays and Pointers Relationship
+
+**Explanation:**
+- `arr` is the name of the array, which represents the address of the first element
+- `&arr[0]` is the address of the first element
+- `arr` and `&arr[0]` are equivalent
+- `*(arr + 2)` means "value at address (arr + 2)", which is `arr[2]`
+
+```c
+#include <stdio.h>
+
+int main() {
+    int arr[5] = {10, 20, 30, 40, 50};
+    
+    printf("arr = %p\n", arr);
+    printf("&arr[0] = %p\n", &arr[0]);
+    printf("Are they equal? %s\n", (arr == &arr[0]) ? "Yes" : "No");
+    
+    printf("\nArray elements using different notations:\n");
+    for (int i = 0; i < 5; i++) {
+        printf("arr[%d] = %d, *(arr + %d) = %d\n", 
+               i, arr[i], i, *(arr + i));
+    }
+    
+    printf("\n*(arr + 2) = %d (which is arr[2])\n", *(arr + 2));
+    
+    return 0;
+}
+```
+
+### Question 4: Find Maximum Element Pointer
+
+```c
+#include <stdio.h>
+
+int* find_max(int *arr, int size) {
+    int *max_ptr = arr;  // Initialize to first element
+    
+    for (int i = 1; i < size; i++) {
+        if (*(arr + i) > *max_ptr) {
+            max_ptr = arr + i;  // Update pointer to new maximum
+        }
+    }
+    
+    return max_ptr;
+}
+
+int main() {
+    int arr[] = {23, 45, 12, 67, 34, 89, 56};
+    int size = sizeof(arr) / sizeof(arr[0]);
+    int *max_element;
+    
+    max_element = find_max(arr, size);
+    
+    printf("Array: ");
+    for (int i = 0; i < size; i++) {
+        printf("%d ", arr[i]);
+    }
+    
+    printf("\nMaximum element: %d\n", *max_element);
+    printf("Address of maximum element: %p\n", max_element);
+    
+    return 0;
+}
+```
+
+**Line-by-line explanation:**
+- Line 3: Function returns pointer to int, takes array pointer and size
+- Line 4: Initialize max_ptr to point to first element
+- Line 6: Loop through remaining elements
+- Line 7-9: If current element is greater, update max_ptr
+- Line 12: Return pointer to maximum element
+- Line 16-17: Declare test array and calculate size
+- Line 20: Call function and store returned pointer
+- Line 22-28: Display array, maximum value, and its address
+
+## VI. Structures and Unions
+
+### Question 1: Student Management System
+
+```c
+#include <stdio.h>
+
+struct Student {
+    char name[50];
+    int roll_number;
+    float marks[3];
+};
+
+int main() {
+    struct Student students[3];
+    float averages[3];
+    int highest_index = 0;
+    
+    // Input student details
+    for (int i = 0; i < 3; i++) {
+        printf("\nEnter details for student %d:\n", i + 1);
+        
+        printf("Name: ");
+        scanf(" %[^\n]", students[i].name);  // Read string with spaces
+        
+        printf("Roll number: ");
+        scanf("%d", &students[i].roll_number);
+        
+        printf("Enter marks for 3 subjects: ");
+        for (int j = 0; j < 3; j++) {
+            scanf("%f", &students[i].marks[j]);
+        }
+    }
+    
+    // Calculate averages
+    for (int i = 0; i < 3; i++) {
+        float sum = 0;
+        for (int j = 0; j < 3; j++) {
+            sum += students[i].marks[j];
+        }
+        averages[i] = sum / 3.0;
+        
+        // Check if this student has highest average
+        if (averages[i] > averages[highest_index]) {
+            highest_index = i;
+        }
+    }
+    
+    // Display results
+    printf("\n--- Student Results ---\n");
+    for (int i = 0; i < 3; i++) {
+        printf("\nStudent %d:\n", i + 1);
+        printf("Name: %s\n", students[i].name);
+        printf("Roll Number: %d\n", students[i].roll_number);
+        printf("Marks: %.1f, %.1f, %.1f\n", 
+               students[i].marks[0], students[i].marks[1], students[i].marks[2]);
+        printf("Average: %.2f\n", averages[i]);
+    }
+    
+    // Display highest scorer
+    printf("\n--- Highest Scorer ---\n");
+    printf("Name: %s\n", students[highest_index].name);
+    printf("Roll Number: %d\n", students[highest_index].roll_number);
+    printf("Average: %.2f\n", averages[highest_index]);
+    
+    return 0;
+}
+```
+
+**Line-by-line explanation:**
+- Line 3-7: Define Student structure with name, roll number, and marks array
+- Line 10-12: Declare array of students, averages array, and highest index tracker
+- Line 15: Loop to input details for 3 students
+- Line 18: Read name with spaces using %[^\n] format specifier
+- Line 20-21: Read roll number
+- Line 23-26: Read marks for 3 subjects
+- Line 29: Loop to calculate averages
+- Line 30-34: Calculate sum and average for each student
+- Line 36-38: Track student with highest average
+- Line 42-49: Display all student details and averages
+- Line 52-56: Display details of highest scoring student
+
+### Question 2: Struct vs Union
+
+```c
+#include <stdio.h>
+
+struct StudentStruct {
+    char name[20];
+    int roll;
+    float marks;
+};
+
+union StudentUnion {
+    char name[20];
+    int roll;
+    float marks;
+};
+
+int main() {
+    struct StudentStruct s;
+    union StudentUnion u;
+    
+    printf("Size of struct: %lu bytes\n", sizeof(s));
+    printf("Size of union: %lu bytes\n", sizeof(u));
+    
+    // Demonstrating struct behavior
+    strcpy(s.name, "Alice");
+    s.roll = 101;
+    s.marks = 85.5;
+    
+    printf("\nStruct values:\n");
+    printf("Name: %s\n", s.name);
+    printf("Roll: %d\n", s.roll);
+    printf("Marks: %.1f\n", s.marks);
+    
+    // Demonstrating union behavior
+    strcpy(u.name, "Bob");
+    printf("\nAfter setting name in union: %s\n", u.name);
+    
+    u.roll = 102;
+    printf("After setting roll in union:\n");
+    printf("Name: %s (corrupted)\n", u.name);
+    printf("Roll: %d\n", u.roll);
+    
+    u.marks = 90.5;
+    printf("After setting marks in union:\n");
+    printf("Roll: %d (corrupted)\n", u.roll);
+    printf("Marks: %.1f\n", u.marks);
+    
+    return 0;
+}
+```
+
+**Line-by-line explanation:**
+- Line 3-7: Define struct with separate memory for each member
+- Line 9-13: Define union where all members share same memory location
+- Line 16-17: Declare instances of struct and union
+- Line 19-20: Show memory sizes (struct = sum of members, union = largest member)
+- Line 23-25: Set all struct members (all remain intact)
+- Line 27-30: Display all struct values (all preserved)
+- Line 33-34: Set union name member
+- Line 36-40: Set union roll member (overwrites name data)
+- Line 42-45: Set union marks member (overwrites roll data)
+
+**Key Differences:**
+- **Struct**: Each member has separate memory location, all can store different values simultaneously
+- **Union**: All members share same memory location, only one can hold a valid value at a time
+
+## VII. File I/O
+
+### Question 1: File Sum Calculator
+
+```c
+#include <stdio.h>
+
+int main() {
+    FILE *input_file, *output_file;
+    int number, sum = 0;
+    
+    // Open input file for reading
+    input_file = fopen("numbers.txt", "r");
+    if (input_file == NULL) {
+        printf("Error: Cannot open numbers.txt for reading.\n");
+        return 1;
+    }
+    
+    // Read integers and calculate sum
+    while (fscanf(input_file, "%d", &number) == 1) {
+        sum += number;
+    }
+    
+    // Close input file
+    fclose(input_file);
+    
+    // Open output file for writing
+    output_file = fopen("sum.txt", "w");
+    if (output_file == NULL) {
+        printf("Error: Cannot open sum.txt for writing.\n");
+        return 1;
+    }
+    
+    // Write sum to output file
+    fprintf(output_file, "Sum of numbers: %d\n", sum);
+    
+    // Close output file
+    fclose(output_file);
+    
+    printf("Sum calculated and written to sum.txt successfully.\n");
+    printf("Sum = %d\n", sum);
+    
+    return 0;
+}
+```
+
+**Line-by-line explanation:**
+- Line 4-5: Declare file pointers and variables
+- Line 8: Open input file in read mode
+- Line 9-12: Check if file opening failed and handle error
+- Line 15-17: Read integers from file until EOF and accumulate sum
+- Line 20: Close input file
+- Line 23: Open output file in write mode
+- Line 24-27: Check if file opening failed and handle error
+- Line 30: Write sum to output file
+- Line 33: Close output file
+- Line 35-36: Display success message and result
+
+### Question 2: File Copy Program
+
+```c
+#include <stdio.h>
+
+int main() {
+    FILE *source, *destination;
+    int ch;
+    
+    // Open source file for reading
+    source = fopen("source.txt", "r");
+    if (source == NULL) {
+        printf("Error: Cannot open source.txt for reading.\n");
+        return 1;
+    }
+    
+    // Open destination file for writing
+    destination = fopen("destination.txt", "w");
+    if (destination == NULL) {
+        printf("Error: Cannot open destination.txt for writing.\n");
+        fclose(source);  // Close source file before exiting
+        return 1;
+    }
+    
+    // Copy character by character
+    while ((ch = fgetc(source)) != EOF) {
+        if (fputc(ch, destination) == EOF) {
+            printf("Error: Failed to write to destination file.\n");
+            fclose(source);
+            fclose(destination);
+            return 1;
+        }
+    }
+    
+    // Close both files
+    fclose(source);
+    fclose(destination);
+    
+    printf("File copied successfully from source.txt to destination.txt.\n");
+    
+    return 0;
+}
+```
+
+**Line-by-line explanation:**
+- Line 4-5: Declare file pointers and character variable
+- Line 8: Open source file in read mode
+- Line 9-12: Check if source file opening failed
+- Line 15: Open destination file in write mode
+- Line 16-20: Check if destination file opening failed, close source if needed
+- Line 23: Read character from source and check for EOF
+- Line 24-29: Write character to destination, handle write errors
+- Line 32-33: Close both files
+- Line 35: Display success message
+
+**Error Handling Features:**
+- Check file opening failures
+- Close files properly on errors
+- Check write operation success
+- Prevent resource leaks by closing files in error paths

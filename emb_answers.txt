@@ -1,0 +1,181 @@
+/*
+#include<stdio.h>
+void main(){
+    
+    //I 1)
+    printf("Hello World");
+    //2)
+    char ar[50];
+    printf("Enter name: "); // Prompt first
+    scanf("%s", ar);      // Read input (no & for strings)
+    printf("Hello, %s", ar);
+    return 0; // Explicit return
+    //II 1)
+    int num1,num2;
+    num1=15;
+    num2=7;
+    printf("%d %d %d %d %d",num1+num2,num1-num2,num1*num2,num1/num2,num1%num2);
+    //II 2)
+    int age;
+    printf("Enter age: "); // Prompt first
+    scanf("%d",&age); 
+    if (age>18){
+        printf("You are an adult");
+    }
+    else{
+        printf("You're a minor");
+    }
+    //II 3)
+    int a=10,b=3;
+    float result=(float)a/b;
+    printf("%f",result);
+    // III 1)
+    int a;
+    printf("Enter a number: ");
+    scanf("%d",&a);
+    if (a>0){
+        printf("+ve");
+    }
+    else if (a<0){
+        printf("-ve");
+    }
+    else{
+        printf("zero");
+    }
+    //III 2)
+    int i;
+    for (i=1;i<=10;i++){
+        printf("%d \n",i);
+    }
+    //III 3)
+    int i=1;
+    int s=0;
+    while(i<=100){
+            s=s+i;
+            i++;
+    }
+    printf("%d",s);
+    //III 4)
+    int d;
+    scanf("%d",&d);
+    switch(d){
+        case 1:
+            printf("Monday");
+            break;
+        case 2:
+            printf("Tuesday");
+            break;
+        case 3:
+            printf("Wednesday");
+            break;  
+        case 4:
+            printf("Thursday");
+            break;    
+        case 5:
+            printf("Friday");
+            break;    
+        case 6:
+            printf("Saturday");
+            break;    
+        case 7:
+            printf("Sunday");
+            break; 
+        default:
+            printf("Invalid day");
+    }
+}
+    //IV 1)
+#include<stdio.h>    
+int s(int x,int y);
+int s(int x,int y){
+    return x+y;
+}
+void main(){
+    int r,x,y;
+    scanf("%d %d",&x,&y);
+    r=s(x,y);
+    printf("%d",r);
+    
+}
+//IV 2)
+#include<stdio.h>
+void printMessage(void){
+    printf("This is a message from a function");
+}
+void main(){
+    printMessage();
+}
+//V 1)
+#include<stdio.h>
+void main(){
+    int arr[5]={10,20,30,40,50};
+    int i;
+    for (i=0;i<5;i++){
+        printf("%d ",arr[i]);
+    }
+}
+V 2)
+#include<stdio.h>
+#include<string.h>
+void main(){
+    int l;
+    char arr[50];
+    scanf("%s",arr);
+    l=strlen(arr);
+    printf("%d",l);
+}
+//V 3)
+#include<stdio.h>
+#include<string.h>
+void main(){
+    
+    char str1[]="Hello",str2[]="World";
+    strcat(str1,str2);
+    printf("%s",str1);
+}
+//VI 1)       
+#include<stdio.h>
+void main(){
+   int x=10;
+   int *ptr=&x;
+   printf("%d",*ptr);
+}
+//VI 2)
+#include<stdio.h>
+int swap(int *a,int *b){
+    int temp;
+    
+    temp=*a;
+    *a=*b;
+    *b=temp;
+}
+void main(){
+   int a,b;
+   scanf("%d",&a);
+   scanf("%d",&b);
+   swap(&a,&b);
+   printf("%d %d",a,b);
+}
+//VI 3)
+#include<stdio.h>
+void main(){
+   int arr[3]={1,2,3};
+   int *ptr=arr;
+   printf("%d",*(ptr+1));
+}
+//////ptr[i]==*ptr where *ptr=arr[0]
+//VI 4)
+#include<stdio.h>
+#include<stdlib.h>
+void main(){
+   int i;
+   int *ptr=(int *)malloc(5*sizeof(int));
+   for (i=0;i<5;i++){
+       *(ptr+i)=i;
+       //ptr[i]=i;
+   }
+   for (i=0;i<5;i++){
+       printf("%d ",*(ptr+i));
+       //printf("%d ",ptr[i]);
+   }
+}
